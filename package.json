@@ -4,7 +4,7 @@
   "description": "A dashboard application built with Next.js for iPad compatibility.",
   "main": "index.js",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -H 192.168.0.35",
     "build": "next build",
     "start": "next start"
   },
@@ -19,12 +19,18 @@
   "dependencies": {
     "next": "^12.0.0",
     "react": "^17.0.0",
-    "react-dom": "^17.0.0"
+    "react-dom": "^17.0.0",
+    "core-js": "^3.26.0"
   },
   "devDependencies": {
     "@types/node": "22.13.13",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "typescript": "^4.0.0"
-  }
+  },
+  "browserslist": [
+    "iOS 10",
+    "Safari 10",
+    "not dead"
+  ]
 }
