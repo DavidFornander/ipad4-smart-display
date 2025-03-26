@@ -10,14 +10,10 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { currentTheme } = useTheme();
   
-  // Prevent iOS Safari behaviors like rubber-band scrolling
+  // Improve touch handling for iPad
   useEffect(() => {
-    document.addEventListener('touchmove', (e) => {
-      // Only prevent default for actual page scrolling, not in scrollable elements
-      if (!(e.target as any).closest('.scrollable, [style*="overflow"]')) {
-        e.preventDefault();
-      }
-    }, { passive: false });
+    // Remove the event listener that was preventing touches
+    // This was blocking normal touch interactions
     
     // Keep screen on by refreshing meta tag
     const keepScreenOn = () => {

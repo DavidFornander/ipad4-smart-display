@@ -83,12 +83,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Touch optimization */
+/* Touch optimization - more permissive */
 button, 
 a,
 input[type="button"],
 input[type="submit"] {
-  touch-action: manipulation;
+  touch-action: auto; /* Changed from 'manipulation' to allow normal touch behavior */
   -webkit-tap-highlight-color: transparent;
   min-height: 44px; /* Apple's recommended minimum tap target size */
   min-width: 44px;
@@ -104,12 +104,12 @@ textarea {
   padding: var(--spacing-sm);
 }
 
-/* Improve touch scrolling */
-div[role="region"],
+/* Remove this since we don't want scrollable areas for now */
+/* div[role="region"],
 .scrollable {
   -webkit-overflow-scrolling: touch;
   overflow-y: auto;
-}
+} */
 
 /* Links */
 a {

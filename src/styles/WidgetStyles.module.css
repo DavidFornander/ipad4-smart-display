@@ -63,8 +63,7 @@
   padding: 0;
   margin: 0;
   flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  overflow-y: hidden; /* Changed from 'auto' to 'hidden' */
 }
 
 .noteListItem {
@@ -178,8 +177,7 @@
 .noteContent {
   flex: 1;
   padding: var(--spacing-sm);
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  overflow-y: hidden; /* Changed from 'auto' to 'hidden' */
   color: var(--text-primary);
   font-size: var(--font-size-md);
   line-height: 1.5;
@@ -198,7 +196,7 @@
   font-size: var(--font-size-md);
   font-family: var(--font-family);
   resize: none;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden; /* Changed */
 }
 
 .noteContentInput:focus {
@@ -356,7 +354,7 @@
 
 .emailList {
   flex: 1;
-  overflow-y: auto;
+  overflow-y: hidden; /* Changed from 'auto' to 'hidden' */
   position: relative;
   -webkit-overflow-scrolling: touch;
 }
@@ -460,8 +458,7 @@
 .emailDetailContent {
   flex: 1;
   padding: var(--spacing-md);
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  overflow-y: hidden; /* Changed from 'auto' to 'hidden' */
 }
 
 .emailDetailSubject {
@@ -545,9 +542,8 @@
 
 .healthContent {
   flex: 1;
-  overflow-y: auto;
+  overflow-y: hidden; /* Changed from 'auto' to 'hidden' */
   padding: var(--spacing-sm);
-  -webkit-overflow-scrolling: touch;
 }
 
 /* Sleep tab styles */
@@ -817,7 +813,7 @@
 
 .waterAmountUnit {
   font-size: var(--font-size-md);
-  color: var(--text-secondary);
+  color: var (--text-secondary);
 }
 
 .waterAddButton {
@@ -881,7 +877,7 @@
   padding: var(--spacing-sm);
   font-size: var(--font-size-md);
   background-color: var(--bg-primary);
-  color: var(--text-primary);
+  color: var (--text-primary);
 }
 
 .addTaskButton {
@@ -932,7 +928,7 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  overflow-y: auto;
+  overflow-y: hidden; /* Changed from 'auto' to 'hidden' */
   flex: 1;
 }
 
@@ -1034,7 +1030,7 @@
 
 .triggersList {
   flex: 1;
-  overflow-y: auto;
+  overflow-y: hidden; /* Changed from 'auto' to 'hidden' */
 }
 
 .triggerGrid {
@@ -1550,7 +1546,7 @@
 
 .newsList {
   flex: 1;
-  overflow-y: auto;
+  overflow-y: hidden; /* Changed from 'auto' to 'hidden' */
 }
 
 .newsItem {

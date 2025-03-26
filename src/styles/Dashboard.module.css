@@ -128,8 +128,7 @@
 
 .widgetContent {
   height: calc(100% - var(--widget-header-height));
-  overflow: auto;
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling for iOS */
+  overflow: hidden; /* Changed from 'auto' to 'hidden' to prevent scrolling */
   position: relative;
 }
 
