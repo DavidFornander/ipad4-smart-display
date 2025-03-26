@@ -1,57 +1,108 @@
 import React, { useState, useEffect } from 'react';
+import styles from '../../styles/WidgetStyles.module.css';
+import { getSystemStatus } from '../../utils/dataService';
+import { Loading, Error } from '../shared/LoadingError';
 
-// Note: These system APIs aren't fully available in browsers, 
-// especially in iOS Safari, so we use what's available
 const SystemStatusWidget: React.FC = () => {
-  const [online, setOnline] = useState<boolean>(navigator.onLine);
-  const [currentTime, setCurrentTime] = useState<Date>(new Date());
-  
+  const [status, setStatus] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+
   useEffect(() => {
-    // Handle online/offline events
-    const handleOnline = () => setOnline(true);
-    const handleOffline = () => setOnline(false);
-    
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-    
-    // Update time
-    const timerId = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-    
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-      clearInterval(timerId);
-    };
+    fetchSystemStatus();
+    // Update every minute
+    const interval = setInterval(fetchSystemStatus, 60000);
+    return () => clearInterval(interval);
   }, []);
-  
-  // Format time into hours:minutes
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  const fetchSystemStatus = () => {
+    getSystemStatus()
+      .then(data => {
+        setStatus(data);
+        setLoading(false);
+        setLastUpdated(new Date());
+      })
+      .catch(err => {
+        setError('Unable to fetch system status');
+        setLoading(false);
+        console.error('System status error:', err);
+      });
   };
-  
+
+  if (loading) {
+    return <Loading message="Loading system status..." />;
+  }
+
+  if (error) {
+    return <Error message={error} onRetry={fetchSystemStatus} />;
+  }
+
   return (
-    <div className="widget system-widget">
-      <div className="widget-inner">
-        <h3 className="widget-title">System Status</h3>
-        
-        <div className="status-item">
-          <span className="status-label">Network:</span>
-          <span className={`status-value ${online ? 'online' : 'offline'}`}>
-            {online ? 'Online' : 'Offline'}
+    <div className={styles.systemWidget}>
+      <div className={styles.statusSection}>
+        <h3>Network</h3>
+        <div className={styles.statusItem}>
+          <span className={styles.statusIcon}>
+            {status.network.online ? '🔌' : '⚠️'}
+          </span>
+          <span className={styles.statusLabel}>Connection:</span>
+          <span className={`${styles.statusValue} ${!status.network.online ? styles.textError : ''}`}>
+            {status.network.online ? 'Online' : 'Offline'}
           </span>
         </div>
-        
-        <div className="status-item">
-          <span className="status-label">Time:</span>
-          <span className="status-value">{formatTime(currentTime)}</span>
-        </div>
-        
-        {/* Note: Battery API is not available in iOS Safari 10 */}
-        <div className="status-note">
-          <p>Battery information is not available in Safari on iOS.</p>
-        </div>
+      </div>
+
+      <div className={styles.statusSection}>
+        <h3>Battery</h3>
+        {status.battery.level !== 'Unknown' ? (
+          <>
+            <div className={styles.statusItem}>
+              <span className={styles.statusIcon}>🔋</span>
+              <span className={styles.statusLabel}>Level:</span>
+              <span className={styles.statusValue}>
+                {typeof status.battery.level === 'number' 
+                  ? `${Math.round(status.battery.level)}%` 
+                  : 'Unknown'}
+              </span>
+            </div>
+            <div className={styles.batteryLevel}>
+              <div 
+                className={`${styles.batteryFill} ${status.battery.level < 20 ? styles.batteryLow : ''}`}
+                style={{ width: `${status.battery.level}%` }}
+              ></div>
+            </div>
+            {status.battery.charging !== 'Unknown' && (
+              <div className={styles.statusItem}>
+                <span className={styles.statusIcon}>⚡</span>
+                <span className={styles.statusLabel}>Status:</span>
+                <span className={styles.statusValue}>
+                  {status.battery.charging ? 'Charging' : 'Not charging'}
+                </span>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className={styles.statusItem}>
+            <span className={styles.statusIcon}>🔋</span>
+            <span className={styles.statusLabel}>Status:</span>
+            <span className={styles.statusValue}>Not available on this device</span>
+          </div>
+        )}
+      </div>
+
+      <div className={styles.statusItem}>
+        <span className={styles.statusIcon}>🕒</span>
+        <span className={styles.statusLabel}>Updated:</span>
+        <span className={styles.statusValue}>
+          {lastUpdated.toLocaleTimeString()}
+        </span>
+      </div>
+      
+      <div className={styles.refreshButton}>
+        <button onClick={fetchSystemStatus} className={styles.smallButton}>
+          Refresh
+        </button>
       </div>
     </div>
   );
