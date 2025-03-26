@@ -1,0 +1,90 @@
+.smartView {
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius-md);
+}
+
+.navigation {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.navButton {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  color: var(--text-primary);
+  min-height: 44px;
+}
+
+.navButton:active {
+  background-color: var(--shadow-color);
+}
+
+.widgetCounter {
+  font-size: var(--font-size-md);
+  color: var(--text-secondary);
+  min-width: 80px;
+  text-align: center;
+}
+
+.pauseButton {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  color: var(--text-primary);
+  font-weight: var(--font-weight-medium);
+  min-height: 44px;
+}
+
+.pauseButton:active {
+  background-color: var(--shadow-color);
+}
+
+.widgetContainer {
+  flex: 1;
+  margin-top: var(--spacing-md);
+}
+
+.noWidgets {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  padding: var(--spacing-xl);
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius-lg);
+}
+
+.noWidgets h2 {
+  margin-bottom: var(--spacing-md);
+  color: var(--text-primary);
+}
+
+.noWidgets p {
+  color: var(--text-secondary);
+}
+
+.errorState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--error-color);
+}

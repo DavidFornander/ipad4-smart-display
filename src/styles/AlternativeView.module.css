@@ -1,0 +1,9 @@
+.alternativeView {
+  padding: var(--spacing-md);
+}
+
+.differentLayout {
+  display: grid;
+  grid-template-columns: 1fr;  /* Changed from repeat(3, 1fr) to make widgets full width */
+  gap: var(--spacing-lg);  /* Increased spacing between widgets */
+}

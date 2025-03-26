@@ -2,25 +2,58 @@ import React, { useState, useEffect } from 'react';
 import styles from '../styles/SettingsPanel.module.css';
 import ThemeSwitcher from './ThemeSwitcher';
 import { clearCacheData, resetAllSettings, getStorageUsage } from '../utils/settingsManager';
-
-// Import the WidgetVisibility interface
+import { retrieveDashboardConfig, storeDashboardConfig } from '../utils/storageService';
 import { WidgetVisibility } from './Dashboard';
 
 interface SettingsPanelProps {
-  widgetVisibility: WidgetVisibility; // Use the imported type instead of Record<string, boolean>
-  toggleWidgetVisibility: (widget: keyof WidgetVisibility) => void; // Make this more type-safe too
   onClose: () => void;
 }
 
-const SettingsPanel: React.FC<SettingsPanelProps> = ({ 
-  widgetVisibility, 
-  toggleWidgetVisibility, 
-  onClose 
-}) => {
+const SettingsPanel: React.FC<SettingsPanelProps> = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState<'widgets' | 'appearance' | 'system'>('widgets');
   const [storageUsage, setStorageUsage] = useState({ used: 0, total: 0 });
   const [clearingCache, setClearingCache] = useState(false);
   const [resettingSettings, setResettingSettings] = useState(false);
+  const [widgetVisibility, setWidgetVisibility] = useState<WidgetVisibility>({
+    clock: true,
+    weather: true,
+    system: true,
+    calendar: true,
+    notes: true,
+    news: true,
+    googleCalendar: false,
+    email: false,
+    health: false,
+    ifttt: false,
+    todo: false,
+  });
+
+  // Load widget visibility on mount
+  useEffect(() => {
+    const savedConfig = retrieveDashboardConfig<{widgetVisibility: WidgetVisibility}>();
+    if (savedConfig && savedConfig.widgetVisibility) {
+      setWidgetVisibility(savedConfig.widgetVisibility);
+    }
+  }, []);
+
+  // Toggle widget visibility and save to localStorage
+  const toggleWidgetVisibility = (widget: keyof WidgetVisibility) => {
+    setWidgetVisibility(prev => {
+      const newVisibility = {
+        ...prev,
+        [widget]: !prev[widget]
+      };
+      
+      // Save updated configuration to localStorage
+      const currentConfig = retrieveDashboardConfig<{widgetVisibility: WidgetVisibility}>() || {};
+      storeDashboardConfig({
+        ...currentConfig,
+        widgetVisibility: newVisibility
+      });
+      
+      return newVisibility;
+    });
+  };
 
   // Get storage info on mount
   useEffect(() => {
