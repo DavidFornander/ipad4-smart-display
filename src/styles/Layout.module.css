@@ -1,0 +1,76 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background-color var(--transition-speed-normal) var(--transition-timing);
+  background-color: var(--bg-primary);
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.content {
+  flex: 1;
+  padding: var(--spacing-md);
+  transition: padding var(--transition-speed-normal) var(--transition-timing);
+}
+
+/* iPad specific layouts */
+/* Portrait (768px width) */
+@media (min-width: 768px) and (orientation: portrait) {
+  .content {
+    padding: var(--spacing-lg);
+  }
+}
+
+/* Landscape (1024px width) */
+@media (min-width: 1024px) and (orientation: landscape) {
+  .content {
+    padding: var(--spacing-xl);
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+}
+
+/* Safari 10 specific fixes */
+@supports (-webkit-overflow-scrolling: touch) {
+  .container {
+    /* Prevent elastic scrolling */
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+  }
+  
+  .main {
+    /* Enable scrolling inside the main content */
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+  }
+}
+
+/* Animation for content transitions */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.content {
+  animation: fadeIn var(--transition-speed-normal) var(--transition-timing);
+}
+
+/* Optional: Optimize for low power mode */
+@media (prefers-reduced-motion: reduce) {
+  .content {
+    animation: none;
+    transition: none;
+  }
+}

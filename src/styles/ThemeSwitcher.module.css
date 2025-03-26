@@ -1,0 +1,32 @@
+.themeSwitcher {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.themeLabel {
+  font-size: var(--font-size-md);
+  color: var(--text-secondary);
+}
+
+.themeSelect {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: var(--font-size-md);
+  min-height: 44px; /* Touch-friendly */
+  -webkit-appearance: none; /* Remove default styling */
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--spacing-md) center;
+  padding-right: 40px;
+}
+
+/* Increase touch area */
+.themeSelect option {
+  padding: var(--spacing-md);
+  font-size: var(--font-size-md);
+}
