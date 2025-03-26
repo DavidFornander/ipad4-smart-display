@@ -29,8 +29,9 @@
     "typescript": "^4.0.0"
   },
   "browserslist": [
-    "iOS 10",
-    "Safari 10",
-    "not dead"
+    "safari >= 10",
+    "ios >= 10",
+    "not ie <= 11",
+    "not op_mini all"
   ]
 }
