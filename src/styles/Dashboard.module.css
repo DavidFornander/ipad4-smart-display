@@ -1,0 +1,420 @@
+.dashboard {
+  padding: var(--spacing-md);
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  font-family: var(--font-family);
+  color: var(--text-primary);
+}
+
+.header {
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: var(--header-height);
+}
+
+.title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+}
+
+.widgetGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: minmax(150px, auto);
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+}
+
+/* iPad (9.7-inch) specific responsive adjustments */
+@media screen and (min-width: 768px) {
+  .widgetGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .widgetGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Remove these problematic rules that are affecting our layout */
+/* @media screen and (min-width: 768px) and (max-width: 1023px) and (orientation: landscape) {
+  .widgetGrid {
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-flow: dense;
+  }
+  
+  .widgetContainer.medium {
+    grid-column: span 1;
+  }
+  
+  .widgetContainer.large {
+    grid-column: span 4;
+  }
+} */
+
+@media screen and (min-width: 768px) and (orientation: portrait) {
+  .widgetGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Remove this rule that's breaking the layout for every 3rd widget */
+/* .widgetGrid .widgetContainer:nth-child(3n) {
+  grid-column: auto;
+} */
+
+.widgetContainer {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-md);
+  box-shadow: 0 2px 8px var(--shadow-color);
+  min-height: 150px;
+  transition: transform var(--transition-speed-normal) var(--transition-timing),
+              box-shadow var(--transition-speed-normal) var(--transition-timing);
+  touch-action: pan-x pan-y; /* Optimizes touch behavior */
+  -webkit-tap-highlight-color: transparent; /* Removes tap highlight on iOS */
+  position: relative;
+  overflow: hidden;
+  cursor: default; /* Remove cursor pointer on iPad */
+  transform-origin: center;
+}
+
+.widgetContainer:active {
+  transform: scale(0.98);
+  box-shadow: 0 1px 4px var(--shadow-color);
+  transition: transform 0.1s ease-out;
+}
+
+/* Size variations for widgets */
+.widgetContainer.small {
+  grid-column: span 1;
+  grid-row: span 1;
+}
+
+.widgetContainer.medium {
+  grid-column: span 2;
+  grid-row: span 1;
+}
+
+.widgetContainer.large {
+  grid-column: span 4;
+  grid-row: span 2;
+}
+
+/* Touch-optimized styling */
+.widgetHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  height: var(--widget-header-height);
+}
+
+.widgetTitle {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.widgetContent {
+  height: calc(100% - var(--widget-header-height));
+  overflow: auto;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling for iOS */
+  position: relative;
+}
+
+/* Loading state */
+.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.loadingIndicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-secondary);
+}
+
+.spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--accent-primary);
+  border-radius: 50%;
+  margin-bottom: var(--spacing-md);
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Touch-friendly button styles */
+.button {
+  min-height: 44px; /* Minimum touch target size */
+  min-width: 44px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  background-color: var(--accent-primary);
+  color: white;
+  border: none;
+  margin: var(--spacing-xs);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  transition: background-color var(--transition-speed-fast) var(--transition-timing);
+}
+
+.button:active {
+  background-color: var(--accent-secondary);
+}
+
+.dashboardSettings {
+  background-color: var(--bg-secondary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: 0 4px 12px var(--shadow-color);
+  margin-top: var(--spacing-lg);
+}
+
+.dashboardSettings h2 {
+  margin-bottom: var(--spacing-lg);
+  color: var(--text-primary);
+}
+
+.dashboardSettings h3 {
+  margin: var(--spacing-lg) 0 var(--spacing-md);
+  color: var(--text-secondary);
+  font-size: var(--font-size-md);
+}
+
+.visibilityToggles {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md);
+  margin: var(--spacing-lg) 0;
+}
+
+.visibilityToggles label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+  padding: var(--spacing-sm);
+  transition: background-color var(--transition-speed-fast) var(--transition-timing);
+  border-radius: var(--border-radius-sm);
+}
+
+.visibilityToggles label:active {
+  background-color: var(--shadow-color);
+}
+
+.visibilityToggles input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: var(--bg-primary);
+  border: 2px solid var(--accent-primary);
+  border-radius: var(--border-radius-sm);
+  position: relative;
+  transition: background-color var(--transition-speed-fast) var(--transition-timing),
+              border-color var(--transition-speed-fast) var (--transition-timing);
+}
+
+.visibilityToggles input[type="checkbox"]:checked {
+  background-color: var(--accent-primary);
+}
+
+.visibilityToggles input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 4px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Improve touchability for all form elements - scoped to our dashboard */
+.dashboard input,
+.dashboard button,
+.dashboard select {
+  min-height: 44px;
+}
+
+.widgetSettings {
+  padding: var(--spacing-md);
+  background-color: var(--bg-primary);
+  border-radius: var(--border-radius-md);
+  height: 100%;
+  overflow: auto;
+  animation: slideInUp var(--transition-speed-normal) var(--transition-timing);
+}
+
+.widgetSettings h4 {
+  margin-top: 0;
+  margin-bottom: var(--spacing-md);
+  color: var(--text-primary);
+}
+
+.settingsButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  color: var(--text-secondary);
+  transition: color var(--transition-speed-fast) var(--transition-timing);
+  border-radius: 50%;
+}
+
+.settingsButton:active {
+  background-color: var(--shadow-color);
+  color: var(--accent-primary);
+  animation: pulse 300ms var(--transition-timing);
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: var(--font-size-lg);
+  color: var(--text-secondary);
+  background-color: var(--bg-primary);
+}
+
+/* Error states */
+.errorState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: var(--spacing-md);
+  color: var(--error-color);
+  text-align: center;
+}
+
+.errorIcon {
+  font-size: 28px;
+  margin-bottom: var(--spacing-md);
+}
+
+.retryButton {
+  margin-top: var(--spacing-md);
+  background-color: var(--bg-primary);
+  color: var(--accent-primary);
+  border: 1px solid var(--accent-primary);
+}
+
+/* Widget-specific styling classes */
+.clockWidget {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.digitalTime {
+  font-size: var(--font-size-xxl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-sm);
+}
+
+.dateDisplay {
+  color: var(--text-secondary);
+  font-size: var(--font-size-md);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .visibilityToggles {
+    grid-template-columns: 1fr;
+  }
+  
+  .digitalTime {
+    font-size: var(--font-size-xl);
+  }
+}
+
+/* Animation for widget mount */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.widgetContainer {
+  animation: fadeIn var(--transition-speed-normal) var(--transition-timing);
+}
+
+/* Add more widget animations */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Apply staggered animations to widgets */
+.widgetContainer:nth-child(1) { animation-delay: 0ms; }
+.widgetContainer:nth-child(2) { animation-delay: 50ms; }
+.widgetContainer:nth-child(3) { animation-delay: 100ms; }
+.widgetContainer:nth-child(4) { animation-delay: 150ms; }
+.widgetContainer:nth-child(5) { animation-delay: 200ms; }
+.widgetContainer:nth-child(6) { animation-delay: 250ms; }
+
+/* Add custom touch feedback for iOS */
+@media (hover: hover) {
+  .button:hover,
+  .settingsButton:hover {
+    opacity: 0.9;
+  }
+}
+
+/* Header controls */
+.headerControls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+/* For smaller screens, stack the controls */
+@media (max-width: 600px) {
+  .headerControls {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+}
