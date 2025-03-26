@@ -13,6 +13,7 @@
   padding: var(--spacing-sm) var(--spacing-md);
   background-color: var(--bg-secondary);
   border-radius: var(--border-radius-md);
+  flex-wrap: wrap;
 }
 
 .navigation {
@@ -87,4 +88,135 @@
   justify-content: center;
   height: 100%;
   color: var(--error-color);
+}
+
+.timerControls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.countdown {
+  position: relative;
+  width: 120px;
+  height: 24px;
+  background-color: var(--bg-primary);
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+  margin-right: var(--spacing-sm);
+}
+
+.countdownBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: var(--accent-primary);
+  transition: width 1s linear;
+}
+
+.countdownText {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  z-index: 1;
+}
+
+.settingsButton {
+  min-width: 44px;
+  min-height: 44px;
+  border: none;
+  background: none;
+  font-size: var(--font-size-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+}
+
+.settingsButton:active {
+  color: var(--accent-primary);
+}
+
+.cycleSettings {
+  background-color: var(--bg-secondary);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.settingHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.settingHeader h3 {
+  margin: 0;
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+}
+
+.closeButton {
+  font-size: 24px;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.closeButton:active {
+  background-color: var(--shadow-color);
+}
+
+.cycleTimeOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.cycleTimeButton {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  color: var(--text-primary);
+}
+
+.cycleTimeButton.active {
+  background-color: var(--accent-primary);
+  color: white;
+  border-color: var(--accent-primary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .controls {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .navigation, .timerControls {
+    width: 100%;
+    justify-content: space-between;
+  }
 }

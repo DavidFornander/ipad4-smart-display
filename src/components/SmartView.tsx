@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styles from '../styles/SmartView.module.css';
 import WidgetBase from './WidgetBase';
 import { availableWidgets } from '../utils/widgetRegistry';
-import { retrieveDashboardConfig } from '../utils/storageService';
+import { retrieveDashboardConfig, storeWidgetSettings, retrieveWidgetSettings } from '../utils/storageService';
 import { WidgetVisibility } from './Dashboard';
 
 interface DashboardConfig {
@@ -10,7 +10,17 @@ interface DashboardConfig {
   theme?: string;
 }
 
+// Settings interface for SmartView
+interface SmartViewSettings {
+  cycleTime: number; // in seconds
+}
+
 const SmartView: React.FC = () => {
+  // Default settings
+  const defaultSettings: SmartViewSettings = {
+    cycleTime: 10 // 10 seconds default
+  };
+
   // State for widget visibility and current widget
   const [widgetVisibility, setWidgetVisibility] = useState<WidgetVisibility>({
     clock: false,
@@ -29,6 +39,18 @@ const SmartView: React.FC = () => {
   const [currentWidgetIndex, setCurrentWidgetIndex] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [enabledWidgets, setEnabledWidgets] = useState<string[]>([]);
+  const [settings, setSettings] = useState<SmartViewSettings>(defaultSettings);
+  const [countdown, setCountdown] = useState<number>(settings.cycleTime);
+  const [showSettings, setShowSettings] = useState<boolean>(false);
+  
+  // Load saved settings
+  useEffect(() => {
+    const savedSettings = retrieveWidgetSettings<SmartViewSettings>('smart_view');
+    if (savedSettings) {
+      setSettings(savedSettings);
+      setCountdown(savedSettings.cycleTime);
+    }
+  }, []);
   
   // Load config and determine enabled widgets
   useEffect(() => {
@@ -46,39 +68,63 @@ const SmartView: React.FC = () => {
     }
   }, []);
   
-  // Set up the cycling functionality
+  // Set up the cycling functionality and countdown
   useEffect(() => {
     if (enabledWidgets.length === 0) return;
     
-    let interval: NodeJS.Timeout;
+    let cycleInterval: NodeJS.Timeout;
+    let countdownInterval: NodeJS.Timeout;
     
     if (!isPaused) {
-      interval = setInterval(() => {
+      // Main cycle interval
+      cycleInterval = setInterval(() => {
         setCurrentWidgetIndex(prevIndex => 
           (prevIndex + 1) % enabledWidgets.length
         );
-      }, 10000); // Cycle every 10 seconds
+        setCountdown(settings.cycleTime); // Reset countdown when widget changes
+      }, settings.cycleTime * 1000);
+      
+      // Countdown interval (updates every second)
+      countdownInterval = setInterval(() => {
+        setCountdown(prevCount => {
+          if (prevCount <= 1) return settings.cycleTime;
+          return prevCount - 1;
+        });
+      }, 1000);
     }
     
     return () => {
-      if (interval) clearInterval(interval);
+      if (cycleInterval) clearInterval(cycleInterval);
+      if (countdownInterval) clearInterval(countdownInterval);
     };
-  }, [enabledWidgets, isPaused]);
+  }, [enabledWidgets, isPaused, settings.cycleTime]);
   
   const handlePrevWidget = () => {
     setCurrentWidgetIndex(prevIndex => 
       (prevIndex - 1 + enabledWidgets.length) % enabledWidgets.length
     );
+    setCountdown(settings.cycleTime); // Reset countdown when manually changing widget
   };
   
   const handleNextWidget = () => {
     setCurrentWidgetIndex(prevIndex => 
       (prevIndex + 1) % enabledWidgets.length
     );
+    setCountdown(settings.cycleTime); // Reset countdown when manually changing widget
   };
   
   const togglePause = () => {
     setIsPaused(prev => !prev);
+  };
+  
+  const updateCycleTime = (newTime: number) => {
+    // Update settings
+    const updatedSettings = { ...settings, cycleTime: newTime };
+    setSettings(updatedSettings);
+    setCountdown(newTime); // Reset countdown with new time
+    
+    // Save to localStorage
+    storeWidgetSettings('smart_view', updatedSettings);
   };
   
   if (enabledWidgets.length === 0) {
@@ -117,14 +163,53 @@ const SmartView: React.FC = () => {
           <button onClick={handleNextWidget} className={styles.navButton}>Next</button>
         </div>
         
-        <button 
-          onClick={togglePause}
-          className={styles.pauseButton}
-          aria-label={isPaused ? "Resume cycling" : "Pause cycling"}
-        >
-          {isPaused ? "▶️ Resume" : "⏸️ Pause"}
-        </button>
+        <div className={styles.timerControls}>
+          <div className={styles.countdown}>
+            <div className={styles.countdownBar} style={{ 
+              width: `${(countdown / settings.cycleTime) * 100}%` 
+            }}></div>
+            <span className={styles.countdownText}>
+              Next: {countdown}s
+            </span>
+          </div>
+          
+          <button 
+            onClick={() => setShowSettings(!showSettings)}
+            className={styles.settingsButton}
+            title="Cycle time settings"
+          >
+            ⚙️
+          </button>
+          
+          <button 
+            onClick={togglePause}
+            className={styles.pauseButton}
+            aria-label={isPaused ? "Resume cycling" : "Pause cycling"}
+          >
+            {isPaused ? "▶️ Resume" : "⏸️ Pause"}
+          </button>
+        </div>
       </div>
+      
+      {showSettings && (
+        <div className={styles.cycleSettings}>
+          <div className={styles.settingHeader}>
+            <h3>Widget Cycle Time</h3>
+            <button className={styles.closeButton} onClick={() => setShowSettings(false)}>×</button>
+          </div>
+          <div className={styles.cycleTimeOptions}>
+            {[5, 10, 15, 30, 60].map(seconds => (
+              <button 
+                key={seconds}
+                onClick={() => updateCycleTime(seconds)}
+                className={`${styles.cycleTimeButton} ${settings.cycleTime === seconds ? styles.active : ''}`}
+              >
+                {seconds} {seconds === 1 ? 'second' : 'seconds'}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
       
       <div className={styles.widgetContainer}>
         <WidgetBase 
